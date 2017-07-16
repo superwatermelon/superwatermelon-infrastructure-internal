@@ -125,3 +125,5 @@ running the `apply` target as it can be destructive.
 ```sh
 aws ec2 create-snapshot --volume-id "..." --description "..."
 ```
+
+[superwatermelon-infrastructure]: https://github.com/superwatermelon/infrastructure.git
