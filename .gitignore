@@ -1,0 +1,8 @@
+.terraform/
+.venv/
+*.key
+*.log
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+*.tfplan
