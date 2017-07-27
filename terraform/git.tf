@@ -126,10 +126,11 @@ After=home-git.service docker.service
 [Service]
 Restart=always
 ExecStart=/usr/bin/docker run \
+  --rm \
   --publish 22:22 \
   --volume /home/git/ssh:/etc/ssh \
   --volume /home/git/repos:/var/git \
-  --name jenkins superwatermelon/git
+  --name git superwatermelon/git
 [Install]
 WantedBy=multi-user.target
 EOF
