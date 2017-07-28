@@ -105,6 +105,33 @@ variables should be set.
       <code>git.internal.example.com</code>.
     </td>
   </tr>
+  <tr>
+    <th scope="row"><code>TEST_HOSTED_ZONE</code></th>
+    <td>
+      The domain that is used for the test private DNS resolution,
+      this is used for split-horizon DNS queries. Use a subdomain that
+      all test services can hang from i.e.
+      <code>test.example.com</code>.
+    </td>
+  </tr>
+  <tr>
+    <th scope="row"><code>STAGE_HOSTED_ZONE</code></th>
+    <td>
+      The domain that is used for the stage private DNS resolution,
+      this is used for split-horizon DNS queries. Use a subdomain that
+      all stage services can hang from i.e.
+      <code>stage.example.com</code>.
+    </td>
+  </tr>
+  <tr>
+    <th scope="row"><code>LIVE_HOSTED_ZONE</code></th>
+    <td>
+      The domain that is used for the live private DNS resolution,
+      this is used for split-horizon DNS queries. Use a subdomain that
+      all live services can hang from i.e.
+      <code>live.example.com</code>.
+    </td>
+  </tr>
 </table>
 
 The default target will plan the changes required to bring the infrastructure
