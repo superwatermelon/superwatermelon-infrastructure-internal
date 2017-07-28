@@ -21,6 +21,18 @@ variable "live_iam_role" {
   description = "The IAM role that is used by Jenkins to deploy to live"
 }
 
+variable "test_hosted_zone" {
+  description = "The private hosted zone for the test VPC."
+}
+
+variable "stage_hosted_zone" {
+  description = "The private hosted zone for the stage VPC."
+}
+
+variable "live_hosted_zone" {
+  description = "The private hosted zone for the live VPC."
+}
+
 variable "internal_tfstate_bucket" {
   description = "The S3 bucket that should contain the tfstate"
 }
@@ -194,6 +206,9 @@ ExecStart=/usr/bin/docker run \
   --env TEST_TFSTATE_BUCKET=$${test_tfstate_bucket} \
   --env STAGE_TFSTATE_BUCKET=$${stage_tfstate_bucket} \
   --env LIVE_TFSTATE_BUCKET=$${live_tfstate_bucket} \
+  --env TEST_HOSTED_ZONE=$${test_hosted_zone} \
+  --env STAGE_HOSTED_ZONE=$${stage_hosted_zone} \
+  --env LIVE_HOSTED_ZONE=$${live_hosted_zone} \
   --env JENKINS_URL=$${jenkins_url} \
   --env JENKINS_ADMIN_ADDRESS=$${jenkins_admin_address} \
   --env JENKINS_AGENT_KEY_PAIR_PREFIX=$${jenkins_agent_key_pair_prefix} \
@@ -218,6 +233,9 @@ EOF
     test_tfstate_bucket            = "${var.test_tfstate_bucket}"
     stage_tfstate_bucket           = "${var.stage_tfstate_bucket}"
     live_tfstate_bucket            = "${var.live_tfstate_bucket}"
+    test_hosted_zone               = "${var.test_hosted_zone}"
+    stage_hosted_zone              = "${var.stage_hosted_zone}"
+    live_hosted_zone               = "${var.live_hosted_zone}"
     jenkins_url                    = "${var.jenkins_url}"
     jenkins_admin_address          = "${var.jenkins_admin_address}"
     jenkins_agent_key_pair_prefix  = "${var.jenkins_agent_key_pair_prefix}"
