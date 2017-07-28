@@ -19,12 +19,12 @@ variable "git_private_ip" {
 
   # The default value here falls within the subnet range
   # specified as subnet_cidr_range in main.tf.
-  default = "10.128.16.4"
+  default     = "10.128.16.4"
 }
 
 variable "git_instance_type" {
   description = "The AWS instance type to use for the instance"
-  default = "t2.nano"
+  default     = "t2.nano"
 }
 
 variable "git_key_pair" {
@@ -37,37 +37,43 @@ variable "git_snapshot_id" {
   # created using the init-snapshot script or a snapshot created from
   # a backup of a pre-existing Git volume.
   description = "The ID of the Git volume snapshot"
-  default = ""
+  default     = ""
 }
 
 variable "git_volume_device" {
   description = "The device name of the block storage volume"
-  default = "xvdf"
+  default     = "xvdf"
 }
 
 variable "git_volume_size" {
   description = "The size of the volume in GB"
-  default = 10
+  default     = 10
 }
 
 variable "git_format_volume" {
   description = "Should the Git volume be formatted (use for first launch)"
-  default = false
+  default     = false
 }
 
 resource "aws_instance" "git" {
-  ami = "${data.aws_ami.coreos.id}"
-  instance_type = "${var.git_instance_type}"
-  private_ip = "${var.git_private_ip}"
-  key_name = "${var.git_key_pair}"
-  subnet_id = "${aws_subnet.subnet.id}"
+  ami                    = "${data.aws_ami.coreos.id}"
+  instance_type          = "${var.git_instance_type}"
+  private_ip             = "${var.git_private_ip}"
+  key_name               = "${var.git_key_pair}"
+  subnet_id              = "${aws_subnet.subnet.id}"
+  user_data              = "${data.template_file.git_ignition.rendered}"
+  vpc_security_group_ids = [
+    "${aws_security_group.git_sg.id}",
+    "${aws_security_group.users_sg.id}"
+  ]
+
   root_block_device {
     volume_type = "gp2"
   }
+
   tags {
     Name = "${var.stack_name}-git"
   }
-  user_data = "${data.template_file.git_ignition.rendered}"
 }
 
 #
@@ -109,11 +115,11 @@ data "template_file" "git_ignition" {
 }
 EOF
   vars = {
-    git_service_unit = "${jsonencode(data.template_file.git_service_unit.rendered)}"
-    git_sshd_socket_unit = "${jsonencode(data.template_file.git_sshd_socket_unit.rendered)}"
-    git_home_service_unit = "${jsonencode(data.template_file.git_home_service_unit.rendered)}"
-    git_home_mount_unit = "${jsonencode(data.template_file.git_home_mount_unit.rendered)}"
-    git_format_service = "${jsonencode(data.template_file.git_format_service.rendered)}"
+    git_service_unit           = "${jsonencode(data.template_file.git_service_unit.rendered)}"
+    git_sshd_socket_unit       = "${jsonencode(data.template_file.git_sshd_socket_unit.rendered)}"
+    git_home_service_unit      = "${jsonencode(data.template_file.git_home_service_unit.rendered)}"
+    git_home_mount_unit        = "${jsonencode(data.template_file.git_home_mount_unit.rendered)}"
+    git_format_service         = "${jsonencode(data.template_file.git_format_service.rendered)}"
     git_format_service_enabled = "${var.git_format_volume == true}"
   }
 }
@@ -212,8 +218,9 @@ resource "aws_eip" "git_eip" {
 
 resource "aws_ebs_volume" "git_volume" {
   availability_zone = "${aws_subnet.subnet.availability_zone}"
-  size = "${var.git_volume_size}"
-  type = "gp2"
+  size              = "${var.git_volume_size}"
+  type              = "gp2"
+
   tags {
     Name = "${var.stack_name}-git"
   }
@@ -221,14 +228,34 @@ resource "aws_ebs_volume" "git_volume" {
 
 resource "aws_eip_association" "git_eip_assoc" {
   allocation_id = "${aws_eip.git_eip.id}"
-  instance_id = "${aws_instance.git.id}"
+  instance_id   = "${aws_instance.git.id}"
 }
 
 resource "aws_volume_attachment" "git_volume_att" {
-  device_name = "/dev/${var.git_volume_device}"
-  instance_id = "${aws_instance.git.id}"
-  volume_id = "${aws_ebs_volume.git_volume.id}"
+  device_name  = "/dev/${var.git_volume_device}"
+  instance_id  = "${aws_instance.git.id}"
+  volume_id    = "${aws_ebs_volume.git_volume.id}"
   skip_destroy = true
+}
+
+resource "aws_security_group" "git_sg" {
+  name        = "${var.stack_name}-git-sg"
+  description = "Git security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_eip.jenkins_eip.public_ip}/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 output "git_public_ip" {
