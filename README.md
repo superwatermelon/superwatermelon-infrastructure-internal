@@ -87,6 +87,24 @@ variables should be set.
       [infrastructure][superwatermelon-infrastructure] project.
     </td>
   </tr>
+  <tr>
+    <th scope="row"><code>INTERNAL_HOSTED_ZONE</code></th>
+    <td>
+      The domain that is used for the internal private DNS resolution,
+      this is used for split-horizon DNS queries. Use a subdomain that
+      all internal services can hang from i.e.
+      <code>internal.example.com</code>. In your public DNS set up a
+      record to point your service, i.e. <code>git.internal.example.com</code>
+      to the public IP.
+
+      To take advantage of split-horizon without having the service
+      trapped within the internal hosted zone, i.e.
+      <code>git.example.com</code> instead of
+      <code>git.internal.example.com</code>. In your public DNS set up a CNAME
+      record to point <code>git.example.com</code> to
+      <code>git.internal.example.com</code>.
+    </td>
+  </tr>
 </table>
 
 The default target will plan the changes required to bring the infrastructure

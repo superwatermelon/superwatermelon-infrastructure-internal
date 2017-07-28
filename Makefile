@@ -25,7 +25,8 @@ TERRAFORM_VARS := -no-color \
 	-var internal_tfstate_bucket=$(INTERNAL_TFSTATE_BUCKET) \
 	-var test_tfstate_bucket=$(TEST_TFSTATE_BUCKET) \
 	-var stage_tfstate_bucket=$(STAGE_TFSTATE_BUCKET) \
-	-var live_tfstate_bucket=$(LIVE_TFSTATE_BUCKET)
+	-var live_tfstate_bucket=$(LIVE_TFSTATE_BUCKET) \
+  -var internal_hosted_zone=$(INTERNAL_HOSTED_ZONE)
 
 default: load plan
 
@@ -56,6 +57,9 @@ ifndef STAGE_TFSTATE_BUCKET
 endif
 ifndef LIVE_TFSTATE_BUCKET
 	$(error LIVE_TFSTATE_BUCKET is undefined)
+endif
+ifndef INTERNAL_HOSTED_ZONE
+	$(error INTERNAL_HOSTED_ZONE is undefined)
 endif
 
 load:

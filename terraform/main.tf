@@ -28,6 +28,10 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
+variable "internal_hosted_zone" {
+  description = "The private hosted zone domain name for internal VPC."
+}
+
 provider "aws" {
   region = "${var.aws_region}"
 }
@@ -125,4 +129,48 @@ resource "aws_security_group" "users_sg" {
   name        = "${var.stack_name}-users-sg"
   description = "User access security group"
   vpc_id      = "${aws_vpc.vpc.id}"
+}
+
+resource "aws_security_group_rule" "git_from_jenkins" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.git_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
+}
+
+resource "aws_security_group_rule" "git_from_jenkins_agent" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.git_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_agent_sg.id}"
+}
+
+resource "aws_route53_zone" "internal_dns" {
+  name    = "${var.internal_hosted_zone}"
+  comment = "Internal DNS hosted zone"
+  vpc_id  = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "${var.stack_name}-zone"
+  }
+}
+
+resource "aws_route53_record" "jenkins_internal_dns_record" {
+  zone_id = "${aws_route53_zone.internal_dns.zone_id}"
+  name    = "jenkins.${var.internal_hosted_zone}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.jenkins.private_ip}"]
+}
+
+resource "aws_route53_record" "git_internal_dns_record" {
+  zone_id = "${aws_route53_zone.internal_dns.zone_id}"
+  name    = "git.${var.internal_hosted_zone}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.git.private_ip}"]
 }

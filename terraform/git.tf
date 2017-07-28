@@ -243,13 +243,6 @@ resource "aws_security_group" "git_sg" {
   description = "Git security group"
   vpc_id      = "${aws_vpc.vpc.id}"
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${aws_eip.jenkins_eip.public_ip}/32"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0

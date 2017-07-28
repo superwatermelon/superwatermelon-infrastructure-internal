@@ -201,6 +201,7 @@ ExecStart=/usr/bin/docker run \
   --env JENKINS_AGENT_REGION=$${jenkins_agent_region} \
   --env JENKINS_AGENT_SUBNET_ID=$${jenkins_agent_subnet_id} \
   --env JENKINS_AGENT_INSTANCE_PROFILE=$${jenkins_agent_instance_profile} \
+  --env JENKINS_AGENT_SECURITY_GROUPS=$${jenkins_agent_security_groups} \
   --env JENKINS_AGENT_NAME=$${jenkins_agent_name} \
   --env JENKINS_CLOUD_NAME=$${jenkins_cloud_name} \
   --env JENKINS_SCRIPT_SECURITY=off \
@@ -224,6 +225,7 @@ EOF
     jenkins_agent_region           = "${var.aws_region}"
     jenkins_agent_subnet_id        = "${aws_subnet.subnet.id}"
     jenkins_agent_instance_profile = "${aws_iam_instance_profile.jenkins_agent_profile.arn}"
+    jenkins_agent_security_groups  = "${aws_security_group.jenkins_agent_sg.id}"
     jenkins_agent_name             = "${var.stack_name}-jenkins-agent"
     jenkins_cloud_name             = "${var.jenkins_cloud_name}"
     aws_region                     = "${var.aws_region}"
@@ -437,6 +439,28 @@ resource "aws_security_group" "jenkins_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group" "jenkins_agent_sg" {
+  name        = "${var.stack_name}-jenkins-agent-sg"
+  description = "Jenkins agent security group"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group_rule" "jenkins_agent_from_jenkins" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.jenkins_agent_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
 }
 
 output "jenkins_public_ip" {

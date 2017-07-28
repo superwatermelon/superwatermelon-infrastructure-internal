@@ -43,6 +43,10 @@ def getJenkinsAgentInstanceProfile() {
   System.getenv('JENKINS_AGENT_INSTANCE_PROFILE')
 }
 
+def getJenkinsAgentSecurityGroups() {
+  System.getenv("JENKINS_AGENT_SECURITY_GROUPS")
+}
+
 def getJenkinsAgentName() {
   System.getenv('JENKINS_AGENT_NAME')
 }
@@ -87,6 +91,7 @@ def configureCloud(jenkins, privateKey) {
   def jenkinsAgentRegion = getJenkinsAgentRegion()
   def jenkinsAgentSubnetId = getJenkinsAgentSubnetId()
   def jenkinsAgentInstanceProfile = getJenkinsAgentInstanceProfile()
+  def jenkinsAgentSecurityGroups = getJenkinsAgentSecurityGroups()
   def jenkinsAgentName = getJenkinsAgentName()
   def jenkinsCloudName = getJenkinsCloudName()
 
@@ -98,7 +103,7 @@ def configureCloud(jenkins, privateKey) {
     /* Spot configuration */
     null,
     /*  Security groups */
-    null,
+    jenkinsAgentSecurityGroups,
     /* Remote FS root */
     '/var/jenkins',
     /* Instance type */
@@ -200,7 +205,7 @@ def configureCloud(jenkins, privateKey) {
     ]
   )
 
-  jenkins.clouds.removeAll()
+  jenkins.clouds.removeAll(cloud.getClass())
   jenkins.clouds.add(cloud)
 }
 
