@@ -26,10 +26,10 @@ TERRAFORM_VARS := -no-color \
 	-var test_tfstate_bucket=$(TEST_TFSTATE_BUCKET) \
 	-var stage_tfstate_bucket=$(STAGE_TFSTATE_BUCKET) \
 	-var live_tfstate_bucket=$(LIVE_TFSTATE_BUCKET) \
-  -var internal_hosted_zone=$(INTERNAL_HOSTED_ZONE) \
-  -var test_hosted_zone=$(TEST_HOSTED_ZONE) \
-  -var stage_hosted_zone=$(STAGE_HOSTED_ZONE) \
-  -var live_hosted_zone=$(LIVE_HOSTED_ZONE)
+	-var internal_hosted_zone=$(INTERNAL_HOSTED_ZONE) \
+	-var test_hosted_zone=$(TEST_HOSTED_ZONE) \
+	-var stage_hosted_zone=$(STAGE_HOSTED_ZONE) \
+	-var live_hosted_zone=$(LIVE_HOSTED_ZONE)
 
 default: load plan
 

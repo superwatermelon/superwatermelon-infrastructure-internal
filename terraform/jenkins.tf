@@ -22,15 +22,15 @@ variable "live_iam_role" {
 }
 
 variable "test_hosted_zone" {
-  description = "The private hosted zone for the test VPC."
+  description = "The private hosted zone for the test VPC"
 }
 
 variable "stage_hosted_zone" {
-  description = "The private hosted zone for the stage VPC."
+  description = "The private hosted zone for the stage VPC"
 }
 
 variable "live_hosted_zone" {
-  description = "The private hosted zone for the live VPC."
+  description = "The private hosted zone for the live VPC"
 }
 
 variable "internal_tfstate_bucket" {

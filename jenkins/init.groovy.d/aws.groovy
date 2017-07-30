@@ -14,7 +14,6 @@ import java.util.logging.Logger
 import static java.util.logging.Level.INFO
 
 def main() {
-
   def jenkins = Jenkins.instance
   def keyPair = createJenkinsAgentKeyPair(jenkins)
   def privateKey = keyPair.keyMaterial
@@ -198,7 +197,7 @@ def configureCloud(jenkins, privateKey) {
     /* Private key */
     privateKey,
     /* Instance cap */
-    '',
+    '4',
     /* Templates */
     [
       linuxAgent
