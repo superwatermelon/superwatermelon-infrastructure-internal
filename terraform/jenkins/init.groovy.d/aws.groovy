@@ -106,7 +106,7 @@ def configureCloud(jenkins, privateKey) {
     /* Remote FS root */
     '/var/jenkins',
     /* Instance type */
-    InstanceType.T2Nano,
+    InstanceType.T2Micro,
     /* EBS optimized */
     false,
     /* Label string */

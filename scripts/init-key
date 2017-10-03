@@ -1,0 +1,31 @@
+#!/bin/bash
+
+is_key_pair_existing() {
+  aws ec2 describe-key-pairs --key-name "${KEY_PAIR}" &> /dev/null
+}
+
+if_key_file_existing() {
+  [[ -f "${KEY_PAIR}.key" ]]
+}
+
+create_key_pair() {
+  exec aws ec2 create-key-pair --key-name "${KEY_PAIR}"
+}
+
+to_key_material() {
+  jq -r .KeyMaterial
+}
+
+if is_key_pair_existing
+then
+  echo "${KEY_PAIR}: Key already exists, nothing to do."
+  exit 0
+fi
+
+if is_key_file_existing
+then
+  echo "[ERROR] - ${KEY_PAIR}: Key file already exists." >& 2
+  exit 1
+fi
+
+create_key_pair | to_key_material > "${KEY_PAIR}.key"
