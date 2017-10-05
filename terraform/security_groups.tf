@@ -1,6 +1,4 @@
 resource "aws_default_security_group" "default_sg" {
-  name        = "internal"
-  description = "Internal"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   tags {
