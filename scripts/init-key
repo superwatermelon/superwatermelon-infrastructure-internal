@@ -4,7 +4,7 @@ is_key_pair_existing() {
   aws ec2 describe-key-pairs --key-name "${KEY_PAIR}" &> /dev/null
 }
 
-if_key_file_existing() {
+is_key_file_existing() {
   [[ -f "${KEY_PAIR}.key" ]]
 }
 
