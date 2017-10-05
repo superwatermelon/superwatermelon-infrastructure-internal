@@ -1,6 +1,16 @@
+resource "aws_default_security_group" "default_sg" {
+  name        = "internal"
+  description = "Internal"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "internal"
+  }
+}
+
 resource "aws_security_group" "users_sg" {
   name        = "tools-users"
-  description = "User access to tools"
+  description = "Tools users"
   vpc_id      = "${aws_vpc.vpc.id}"
 
   tags {
