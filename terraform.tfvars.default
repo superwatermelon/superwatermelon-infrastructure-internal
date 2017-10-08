@@ -1,0 +1,13 @@
+jenkins_format_volume = false
+
+git_format_volume = false
+
+seed_tfstate_bucket = "seed"
+
+internal_hosted_zone = "internal.example.com"
+
+test_hosted_zone = "test.example.com"
+
+stage_hosted_zone = "stage.example.com"
+
+live_hosted_zone = "live.example.com"

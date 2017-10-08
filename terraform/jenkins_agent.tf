@@ -39,6 +39,23 @@ resource "aws_iam_role" "jenkins_agent_role" {
 EOF
 }
 
+resource "aws_iam_role_policy" "jenkins_agent_internal_deployment_policy" {
+  name   = "jenkins-agent-internal-deployment"
+  role   = "${aws_iam_role.jenkins_agent_role.id}"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": "${data.terraform_remote_state.seed.internal_role_arn}"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy" "jenkins_agent_test_deployment_policy" {
   name   = "jenkins-agent-test-deployment"
   role   = "${aws_iam_role.jenkins_agent_role.id}"
@@ -49,7 +66,7 @@ resource "aws_iam_role_policy" "jenkins_agent_test_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${var.test_iam_role}"
+      "Resource": "${data.terraform_remote_state.seed.test_role_arn}"
     }
   ]
 }
@@ -66,7 +83,7 @@ resource "aws_iam_role_policy" "jenkins_agent_stage_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${var.stage_iam_role}"
+      "Resource": "${data.terraform_remote_state.seed.stage_role_arn}"
     }
   ]
 }
@@ -83,7 +100,7 @@ resource "aws_iam_role_policy" "jenkins_agent_live_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${var.live_iam_role}"
+      "Resource": "${data.terraform_remote_state.seed.live_role_arn}"
     }
   ]
 }

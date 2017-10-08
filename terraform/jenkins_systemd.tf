@@ -1,13 +1,5 @@
-variable "test_iam_role" {
-  description = "The IAM role that is used by Jenkins to deploy to test"
-}
-
-variable "stage_iam_role" {
-  description = "The IAM role that is used by Jenkins to deploy to stage"
-}
-
-variable "live_iam_role" {
-  description = "The IAM role that is used by Jenkins to deploy to live"
+variable "internal_hosted_zone" {
+  description = "The private hosted zone for the internal VPC"
 }
 
 variable "test_hosted_zone" {
@@ -20,22 +12,6 @@ variable "stage_hosted_zone" {
 
 variable "live_hosted_zone" {
   description = "The private hosted zone for the live VPC"
-}
-
-variable "internal_tfstate_bucket" {
-  description = "The S3 bucket that should contain the tfstate"
-}
-
-variable "test_tfstate_bucket" {
-  description = "The S3 bucket that should contain the tfstate for test"
-}
-
-variable "stage_tfstate_bucket" {
-  description = "The S3 bucket that should contain the tfstate for stage"
-}
-
-variable "live_tfstate_bucket" {
-  description = "The S3 bucket that should contain the tfstate for live"
 }
 
 variable "jenkins_agent_region" {
@@ -93,13 +69,16 @@ ExecStart=/usr/bin/docker run \
   --rm \
   --publish 8080:8080 \
   --volume /home/jenkins:/var/jenkins_home \
+  --env INTERNAL_IAM_ROLE=$${internal_iam_role} \
   --env TEST_IAM_ROLE=$${test_iam_role} \
   --env STAGE_IAM_ROLE=$${stage_iam_role} \
   --env LIVE_IAM_ROLE=$${live_iam_role} \
-  --env TFSTATE_BUCKET=$${internal_tfstate_bucket} \
+  --env SEED_TFSTATE_BUCKET=$${seed_tfstate_bucket} \
+  --env INTERNAL_TFSTATE_BUCKET=$${internal_tfstate_bucket} \
   --env TEST_TFSTATE_BUCKET=$${test_tfstate_bucket} \
   --env STAGE_TFSTATE_BUCKET=$${stage_tfstate_bucket} \
   --env LIVE_TFSTATE_BUCKET=$${live_tfstate_bucket} \
+  --env INTERNAL_HOSTED_ZONE=$${internal_hosted_zone} \
   --env TEST_HOSTED_ZONE=$${test_hosted_zone} \
   --env STAGE_HOSTED_ZONE=$${stage_hosted_zone} \
   --env LIVE_HOSTED_ZONE=$${live_hosted_zone} \
@@ -120,13 +99,16 @@ ExecStart=/usr/bin/docker run \
 WantedBy=multi-user.target
 EOF
   vars = {
-    test_iam_role                  = "${var.test_iam_role}"
-    stage_iam_role                 = "${var.stage_iam_role}"
-    live_iam_role                  = "${var.live_iam_role}"
-    internal_tfstate_bucket        = "${var.internal_tfstate_bucket}"
-    test_tfstate_bucket            = "${var.test_tfstate_bucket}"
-    stage_tfstate_bucket           = "${var.stage_tfstate_bucket}"
-    live_tfstate_bucket            = "${var.live_tfstate_bucket}"
+    internal_iam_role              = "${data.terraform_remote_state.seed.internal_role_arn}"
+    test_iam_role                  = "${data.terraform_remote_state.seed.test_role_arn}"
+    stage_iam_role                 = "${data.terraform_remote_state.seed.stage_role_arn}"
+    live_iam_role                  = "${data.terraform_remote_state.seed.live_role_arn}"
+    seed_tfstate_bucket            = "${var.seed_tfstate_bucket}"
+    internal_tfstate_bucket        = "${data.terraform_remote_state.seed.internal_tfstate_bucket}"
+    test_tfstate_bucket            = "${data.terraform_remote_state.seed.test_tfstate_bucket}"
+    stage_tfstate_bucket           = "${data.terraform_remote_state.seed.stage_tfstate_bucket}"
+    live_tfstate_bucket            = "${data.terraform_remote_state.seed.live_tfstate_bucket}"
+    internal_hosted_zone           = "${var.internal_hosted_zone}"
     test_hosted_zone               = "${var.test_hosted_zone}"
     stage_hosted_zone              = "${var.stage_hosted_zone}"
     live_hosted_zone               = "${var.live_hosted_zone}"

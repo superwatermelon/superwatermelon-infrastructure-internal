@@ -1,7 +1,3 @@
-variable "internal_hosted_zone" {
-  description = "The private hosted zone domain name for internal VPC."
-}
-
 resource "aws_route53_zone" "internal_dns" {
   name    = "${var.internal_hosted_zone}"
   comment = "Internal"
