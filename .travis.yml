@@ -1,0 +1,10 @@
+before_install:
+  - curl -sLo /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.10.7/terraform_0.10.7_linux_amd64.zip
+  - unzip -d /tmp /tmp/terraform.zip
+  - sudo mv -f /tmp/terraform /usr/local/bin/terraform
+
+install:
+  - terraform init -backend=false -input=false terraform
+
+script:
+  - terraform validate -var jenkins_key_pair=jenkins -var git_key_pair=git -var-file=terraform.tfvars.default terraform
