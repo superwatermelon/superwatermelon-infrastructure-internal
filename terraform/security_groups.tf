@@ -84,3 +84,7 @@ resource "aws_security_group" "git_sg" {
     Name = "git"
   }
 }
+
+output "jenkins_agent_sg" {
+  value = "${aws_security_group.jenkins_agent_sg.id}"
+}
