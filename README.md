@@ -147,7 +147,7 @@ For subsequent runs, the `JENKINS_FORMAT_VOLUME` and `GIT_FORMAT_VOLUME` flags
 should be omitted and will default to `false`.
 
 ```sh
-make
+JENKINS_KEY_PAIR=jenkins-$(date +"%Y-%m-%d") GIT_KEY_PAIR=git-$(date +"%Y-%m-%d") make
 ```
 
 If any variables are missing you will see errors as follows:
@@ -161,7 +161,7 @@ the infrastructure to the correct state. The apply target will subsequently
 apply the plan created from the previouscommand.
 
 ```sh
-make apply
+JENKINS_KEY_PAIR=jenkins-$(date +"%Y-%m-%d") GIT_KEY_PAIR=git-$(date +"%Y-%m-%d") make apply
 ```
 
 > **NOTE:** It is advisable to create snapshots of the EBS volumes before

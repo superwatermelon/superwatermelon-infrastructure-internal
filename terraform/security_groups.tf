@@ -16,24 +16,6 @@ resource "aws_security_group" "users_sg" {
   }
 }
 
-resource "aws_security_group_rule" "git_from_jenkins" {
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = "-1"
-  security_group_id        = "${aws_security_group.git_sg.id}"
-  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
-}
-
-resource "aws_security_group_rule" "git_from_jenkins_agent" {
-  type                     = "ingress"
-  from_port                = 0
-  to_port                  = 0
-  protocol                 = "-1"
-  security_group_id        = "${aws_security_group.git_sg.id}"
-  source_security_group_id = "${aws_security_group.jenkins_agent_sg.id}"
-}
-
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins"
   description = "Jenkins"
@@ -49,6 +31,34 @@ resource "aws_security_group" "jenkins_sg" {
   tags {
     Name = "jenkins"
   }
+}
+
+resource "aws_security_group" "jenkins_elb_sg" {
+  name = "jenkins-elb"
+  description = "Jenkins load balancer"
+  vpc_id = "${aws_vpc.vpc.id}"
+
+  tags {
+    Name = "jenkins-elb"
+  }
+}
+
+resource "aws_security_group_rule" "jenkins_elb_to_jenkins" {
+  type                     = "egress"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
+  security_group_id        = "${aws_security_group.jenkins_elb_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
+}
+
+resource "aws_security_group_rule" "jenkins_from_jenkins_elb" {
+  type                     = "ingress"
+  from_port                = 8080
+  to_port                  = 8080
+  protocol                 = "tcp"
+  security_group_id        = "${aws_security_group.jenkins_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_elb_sg.id}"
 }
 
 resource "aws_security_group" "jenkins_agent_sg" {
@@ -68,6 +78,15 @@ resource "aws_security_group" "jenkins_agent_sg" {
   }
 }
 
+resource "aws_security_group_rule" "jenkins_agent_from_jenkins" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.jenkins_agent_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
+}
+
 resource "aws_security_group" "git_sg" {
   name        = "git"
   description = "Git"
@@ -83,6 +102,24 @@ resource "aws_security_group" "git_sg" {
   tags {
     Name = "git"
   }
+}
+
+resource "aws_security_group_rule" "git_from_jenkins" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.git_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_sg.id}"
+}
+
+resource "aws_security_group_rule" "git_from_jenkins_agent" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = "${aws_security_group.git_sg.id}"
+  source_security_group_id = "${aws_security_group.jenkins_agent_sg.id}"
 }
 
 output "jenkins_agent_sg" {

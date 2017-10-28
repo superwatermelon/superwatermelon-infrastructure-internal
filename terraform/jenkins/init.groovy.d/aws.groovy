@@ -143,6 +143,8 @@ def configureCloud(jenkins, privateKey) {
     new UnixData(
       /* Root command prefix */
       '',
+      /* Slave command prefix */
+      '',
       /* SSH port */
       '22'
     ),
@@ -166,9 +168,11 @@ def configureCloud(jenkins, privateKey) {
     /* Use private DNS name */
     false,
     /* Instance cap */
-    '',
+    '3',
     /* IAM instance profile */
     jenkinsAgentInstanceProfile,
+    /* Delete root on termination */
+    true,
     /* Use ephemeral devices */
     false,
     /* Use dedicated tenancy */

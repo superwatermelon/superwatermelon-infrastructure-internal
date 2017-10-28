@@ -21,7 +21,6 @@ variable "jenkins_agent_region" {
 
 variable "jenkins_url" {
   description = "The URL for the Jenkins UI"
-  default     = "http://jenkins.superwatermelon.org:8080/"
 }
 
 variable "jenkins_cloud_name" {
@@ -31,12 +30,11 @@ variable "jenkins_cloud_name" {
 
 variable "jenkins_admin_address" {
   description = "The support / admin contact email address"
-  default     = "support@superwatermelon.com"
 }
 
 variable "jenkins_agent_key_pair_prefix" {
   description = "The prefix to use for keys created by Jenkins for agents"
-  default     = "tools-jenkins-agent"
+  default     = "jenkins-agent"
 }
 
 /*
@@ -64,7 +62,7 @@ Requires=home-jenkins.service docker.service
 After=home-jenkins.service docker.service
 [Service]
 Restart=always
-ExecStartPre=/usr/bin/docker pull superwatermelon/jenkins:v0.3.1
+ExecStartPre=/usr/bin/docker pull superwatermelon/jenkins:v0.4.1
 ExecStart=/usr/bin/docker run \
   --rm \
   --publish 8080:8080 \
@@ -94,7 +92,7 @@ ExecStart=/usr/bin/docker run \
   --env JENKINS_CLOUD_NAME=$${jenkins_cloud_name} \
   --env JENKINS_SCRIPT_SECURITY=off \
   --env AWS_REGION=$${aws_region} \
-  --name jenkins superwatermelon/jenkins:v0.3.1
+  --name jenkins superwatermelon/jenkins:v0.4.1
 [Install]
 WantedBy=multi-user.target
 EOF

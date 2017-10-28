@@ -1,4 +1,10 @@
+jenkins_ssl_cert      = "arn:aws:acm:eu-west-1:123456789012:certificate/12345678-1234-4234-1234-123456789012"
+
 jenkins_format_volume = false
+
+jenkins_url           = "https://jenkins.internal.example.com/"
+
+jenkins_admin_address = "support@example.com"
 
 git_format_volume     = false
 
@@ -11,3 +17,11 @@ test_hosted_zone      = "test.example.com"
 stage_hosted_zone     = "stage.example.com"
 
 live_hosted_zone      = "live.example.com"
+
+# The zone to use for resources that should be accessible by
+# internal users over the internet. In this example we are
+# using split horizon DNS where the internal hosted zone
+# resolves to the private IPs for queries within the VPC and
+# the zone defined below resolves to the public addresses outside
+# of the VPC.
+public_hosted_zone    = "internal.example.com"
