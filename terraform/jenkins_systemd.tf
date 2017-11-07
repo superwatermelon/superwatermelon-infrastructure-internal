@@ -92,7 +92,8 @@ ExecStart=/usr/bin/docker run \
   --env JENKINS_CLOUD_NAME=$${jenkins_cloud_name} \
   --env JENKINS_SCRIPT_SECURITY=off \
   --env AWS_REGION=$${aws_region} \
-  --name jenkins superwatermelon/jenkins:v0.4.1
+  --name jenkins \
+  superwatermelon/jenkins:v0.4.2
 [Install]
 WantedBy=multi-user.target
 EOF
