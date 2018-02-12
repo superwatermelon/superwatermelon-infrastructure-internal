@@ -174,6 +174,6 @@ ExecStart=/bin/bash -xc "parted /dev/$${volume} mklabel gpt mkpart primary 0%% 1
 WantedBy=multi-user.target
 EOF
   vars = {
-    volume = "${var.git_volume_device}"
+    volume = "${var.jenkins_volume_device}"
   }
 }
