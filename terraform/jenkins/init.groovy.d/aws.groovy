@@ -15,11 +15,9 @@ import static java.util.logging.Level.INFO
 
 def main() {
   def jenkins = Jenkins.instance
-  def keyPair = createJenkinsAgentKeyPair(jenkins)
-  def privateKey = keyPair.keyMaterial
-  configureSshCredentials(jenkins, privateKey)
-  configureCloud(jenkins, privateKey)
-  jenkins.save()
+  if (!jenkins.clouds.cloudName.contains('aws')) {
+    createCloud()
+  }
 }
 
 def getJenkinsAgentKeyPairPrefix() {
@@ -54,12 +52,26 @@ def getJenkinsCloudName() {
   System.getenv('JENKINS_CLOUD_NAME')
 }
 
+def getJenkinsAgentKeyPair() {
+  def prefix = getJenkinsAgentKeyPairPrefix()
+  def timestamp = new Date().format("YYYY-MM-dd")
+  def uuid = UUID.randomUUID().toString()
+  "${prefix}-${timestamp}-${uuid}"
+}
+
+def createCloud() {
+  def keyPair = createJenkinsAgentKeyPair(jenkins)
+  def privateKey = keyPair.keyMaterial
+  configureSshCredentials(jenkins, privateKey)
+  configureCloud(jenkins, privateKey)
+  jenkins.save()
+}
+
 def createJenkinsAgentKeyPair(jenkins) {
-  def jenkinsAgentKeyPairPrefix = getJenkinsAgentKeyPairPrefix()
-  def jenkinsAgentKeyPair = "${jenkinsAgentKeyPairPrefix}-${UUID.randomUUID().toString()}"
+  def keyPair = getJenkinsAgentKeyPair()
   def region = getJenkinsAgentRegion()
   def amazonClient = new AmazonEC2Client().withRegion(Regions.fromName(region))
-  def createKeyPairRequest = new CreateKeyPairRequest(jenkinsAgentKeyPair)
+  def createKeyPairRequest = new CreateKeyPairRequest(keyPair)
   def createKeyPairResult = amazonClient.createKeyPair(createKeyPairRequest)
   def keyPair = createKeyPairResult.keyPair
   keyPair
