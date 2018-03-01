@@ -16,7 +16,7 @@ import static java.util.logging.Level.INFO
 def main() {
   def jenkins = Jenkins.instance
   if (!jenkins.clouds.cloudName.contains('aws')) {
-    createCloud()
+    createCloud(jenkins)
   }
 }
 
@@ -59,7 +59,7 @@ def getJenkinsAgentKeyPair() {
   "${prefix}-${timestamp}-${uuid}"
 }
 
-def createCloud() {
+def createCloud(jenkins) {
   def keyPair = createJenkinsAgentKeyPair(jenkins)
   def privateKey = keyPair.keyMaterial
   configureSshCredentials(jenkins, privateKey)
