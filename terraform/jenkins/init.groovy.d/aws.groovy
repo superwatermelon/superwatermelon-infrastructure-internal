@@ -112,7 +112,7 @@ def configureCloud(jenkins, privateKey) {
     /* Availability zone */
     '',
     /* Spot configuration */
-    null,
+    new SpotConfiguration("0.020"),
     /*  Security groups */
     jenkinsAgentSecurityGroups,
     /* Remote FS root */
@@ -148,7 +148,7 @@ def configureCloud(jenkins, privateKey) {
       chmod 600 /var/jenkins/.ssh/authorized_keys
     '''.stripIndent(),
     /* Number of executors */
-    '8',
+    '2',
     /* Remote user */
     'jenkins',
     /* AMI type */
