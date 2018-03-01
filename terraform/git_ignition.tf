@@ -29,16 +29,16 @@ data "template_file" "git_ignition" {
   },
   "systemd":{
     "units":[
-      {"name":"docker.socket","enable":true},
-      {"name":"containerd.service","enable":true},
-      {"name":"docker.service","enable":true},
-      {"name":"git.service","enable":true,"contents":$${git_service_unit}},
-      {"name":"gitlist-nginx.service","enable":true,"contents":$${gitlist_nginx_service_unit}},
-      {"name":"gitlist-php-fpm.service","enable":true,"contents":$${gitlist_php_fpm_service_unit}},
-      {"name":"sshd.socket","enable":true,"contents":$${git_sshd_socket_unit}},
-      {"name":"home-git.service","enable":true,"contents":$${git_home_service_unit}},
-      {"name":"home-git.mount","enable":true,"contents":$${git_home_mount_unit}},
-      {"name":"git-format.service","enable":$${git_format_service_enabled},"contents":$${git_format_service}}
+      {"name":"docker.socket","enabled":true},
+      {"name":"containerd.service","enabled":true},
+      {"name":"docker.service","enabled":true},
+      {"name":"git.service","enabled":true,"contents":$${git_service_unit}},
+      {"name":"gitlist-nginx.service","enabled":true,"contents":$${gitlist_nginx_service_unit}},
+      {"name":"gitlist-php-fpm.service","enabled":true,"contents":$${gitlist_php_fpm_service_unit}},
+      {"name":"sshd.socket","enabled":true,"contents":$${git_sshd_socket_unit}},
+      {"name":"home-git.service","enabled":true,"contents":$${git_home_service_unit}},
+      {"name":"home-git.mount","enabled":true,"contents":$${git_home_mount_unit}},
+      {"name":"git-format.service","enabled":$${git_format_service_enabled},"contents":$${git_format_service}}
     ]
   }
 }

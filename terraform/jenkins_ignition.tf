@@ -22,13 +22,13 @@ data "template_file" "jenkins_ignition" {
   },
   "systemd":{
     "units":[
-      {"name":"docker.socket","enable":true},
-      {"name":"containerd.service","enable":true},
-      {"name":"docker.service","enable":true},
-      {"name":"jenkins.service","enable":true,"contents":$${jenkins_service_unit}},
-      {"name":"home-jenkins.service","enable":true,"contents":$${jenkins_home_service_unit}},
-      {"name":"home-jenkins.mount","enable":true,"contents":$${jenkins_home_mount_unit}},
-      {"name":"jenkins-format.service","enable":$${jenkins_format_service_enabled},"contents":$${jenkins_format_service}}
+      {"name":"docker.socket","enabled":true},
+      {"name":"containerd.service","enabled":true},
+      {"name":"docker.service","enabled":true},
+      {"name":"jenkins.service","enabled":true,"contents":$${jenkins_service_unit}},
+      {"name":"home-jenkins.service","enabled":true,"contents":$${jenkins_home_service_unit}},
+      {"name":"home-jenkins.mount","enabled":true,"contents":$${jenkins_home_mount_unit}},
+      {"name":"jenkins-format.service","enabled":$${jenkins_format_service_enabled},"contents":$${jenkins_format_service}}
     ]
   }
 }
