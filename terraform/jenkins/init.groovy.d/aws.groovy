@@ -73,8 +73,7 @@ def createJenkinsAgentKeyPair(jenkins) {
   def amazonClient = new AmazonEC2Client().withRegion(Regions.fromName(region))
   def createKeyPairRequest = new CreateKeyPairRequest(keyPair)
   def createKeyPairResult = amazonClient.createKeyPair(createKeyPairRequest)
-  def keyPair = createKeyPairResult.keyPair
-  keyPair
+  createKeyPairResult.keyPair
 }
 
 def configureSshCredentials(jenkins, privateKey) {
