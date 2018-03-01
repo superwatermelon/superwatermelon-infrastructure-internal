@@ -111,7 +111,7 @@ def configureCloud(jenkins, privateKey) {
     /* Availability zone */
     '',
     /* Spot configuration */
-    new SpotConfiguration("0.020"),
+    null,
     /*  Security groups */
     jenkinsAgentSecurityGroups,
     /* Remote FS root */
