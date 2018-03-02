@@ -122,6 +122,23 @@ resource "aws_security_group_rule" "git_from_jenkins_agent" {
   source_security_group_id = "${aws_security_group.jenkins_agent_sg.id}"
 }
 
+resource "aws_security_group" "docker_registry_sg" {
+  name        = "docker-registry"
+  description = "Docker Registry"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "docker-registry"
+  }
+}
+
 output "jenkins_agent_sg" {
   value = "${aws_security_group.jenkins_agent_sg.id}"
 }

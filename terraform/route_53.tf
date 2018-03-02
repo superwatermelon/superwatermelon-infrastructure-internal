@@ -64,3 +64,27 @@ resource "aws_route53_record" "git_public_dns_record" {
   ttl     = "300"
   records = ["${aws_eip.git_eip.public_ip}"]
 }
+
+resource "aws_route53_record" "docker_registry_public_dns_cname_record" {
+  zone_id = "${aws_route53_zone.public_dns.zone_id}"
+  name    = "docker.${var.public_hosted_zone}"
+  type    = "CNAME"
+  ttl     = "300"
+  records = ["docker.${var.internal_hosted_zone}"]
+}
+
+resource "aws_route53_record" "docker_registry_private_dns_record" {
+  zone_id = "${aws_route53_zone.private_dns.zone_id}"
+  name    = "docker.${var.internal_hosted_zone}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.docker_registry.private_ip}"]
+}
+
+resource "aws_route53_record" "docker_registry_public_dns_record" {
+  zone_id = "${aws_route53_zone.public_dns.zone_id}"
+  name    = "docker.${var.internal_hosted_zone}"
+  type    = "A"
+  ttl     = "300"
+  records = ["${aws_instance.docker_registry.public_ip}"]
+}
