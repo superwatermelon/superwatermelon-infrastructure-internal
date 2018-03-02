@@ -10,6 +10,10 @@ git_format_volume     = false
 
 seed_tfstate_bucket   = "seed"
 
+artifact_bucket       = "artifacts"
+
+certificate_bucket    = "certificates"
+
 internal_hosted_zone  = "internal.example.com"
 
 test_hosted_zone      = "test.example.com"
