@@ -5,5 +5,8 @@ variable "certificate_bucket" {
 resource "aws_s3_bucket" "certificates" {
   bucket     = "${var.certificate_bucket}"
   acl        = "private"
-  versioning = "enabled"
+
+  versioning {
+    enabled = true
+  }
 }
