@@ -49,7 +49,7 @@ resource "aws_iam_role_policy" "jenkins_agent_internal_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${data.terraform_remote_state.seed.internal_role_arn}"
+      "Resource": "${data.terraform_remote_state.seed.internal_deployment_role_arn}"
     }
   ]
 }
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy" "jenkins_agent_test_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${data.terraform_remote_state.seed.test_role_arn}"
+      "Resource": "${data.terraform_remote_state.seed.test_deployment_role_arn}"
     }
   ]
 }
@@ -83,7 +83,7 @@ resource "aws_iam_role_policy" "jenkins_agent_stage_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${data.terraform_remote_state.seed.stage_role_arn}"
+      "Resource": "${data.terraform_remote_state.seed.stage_deployment_role_arn}"
     }
   ]
 }
@@ -100,7 +100,7 @@ resource "aws_iam_role_policy" "jenkins_agent_live_deployment_policy" {
     {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
-      "Resource": "${data.terraform_remote_state.seed.live_role_arn}"
+      "Resource": "${data.terraform_remote_state.seed.live_deployment_role_arn}"
     }
   ]
 }

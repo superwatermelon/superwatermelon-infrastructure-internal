@@ -98,10 +98,10 @@ ExecStart=/usr/bin/docker run \
 WantedBy=multi-user.target
 EOF
   vars = {
-    internal_iam_role              = "${data.terraform_remote_state.seed.internal_role_arn}"
-    test_iam_role                  = "${data.terraform_remote_state.seed.test_role_arn}"
-    stage_iam_role                 = "${data.terraform_remote_state.seed.stage_role_arn}"
-    live_iam_role                  = "${data.terraform_remote_state.seed.live_role_arn}"
+    internal_iam_role              = "${data.terraform_remote_state.seed.internal_deployment_role_arn}"
+    test_iam_role                  = "${data.terraform_remote_state.seed.test_deployment_role_arn}"
+    stage_iam_role                 = "${data.terraform_remote_state.seed.stage_deployment_role_arn}"
+    live_iam_role                  = "${data.terraform_remote_state.seed.live_deployment_role_arn}"
     seed_tfstate_bucket            = "${var.seed_tfstate_bucket}"
     internal_tfstate_bucket        = "${data.terraform_remote_state.seed.internal_tfstate_bucket}"
     test_tfstate_bucket            = "${data.terraform_remote_state.seed.test_tfstate_bucket}"
