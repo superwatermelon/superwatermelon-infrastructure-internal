@@ -6,7 +6,7 @@ variable "jenkins_format_volume" {
 data "template_file" "jenkins_ignition" {
   template = <<EOF
 {
-  "ignition":{"version":"2.0.0"},
+  "ignition":{"version":"2.1.0"},
   "passwd":{
     "users":[
       {"name":"jenkins","create":{"uid":1000}}
