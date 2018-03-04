@@ -19,10 +19,6 @@ ifndef GIT_KEY_PAIR
 	$(error GIT_KEY_PAIR is undefined)
 endif
 
-ifndef DOCKER_REGISTRY_KEY_PAIR
-	$(error DOCKER_REGISTRY_KEY_PAIR is undefined)
-endif
-
 .PHONY: load
 load:
 	$(TERRAFORM) init \
@@ -39,14 +35,12 @@ plan: check
 		-out $(TFPLAN_PATH) \
 		-var jenkins_key_pair=$(JENKINS_KEY_PAIR) \
 		-var git_key_pair=$(GIT_KEY_PAIR) \
-		-var docker_registry_key_pair=$(DOCKER_REGISTRY_KEY_PAIR) \
 		$(TERRAFORM_DIR)
 
 .PHONY: keys
 keys: check
 	KEY_PAIR=$(JENKINS_KEY_PAIR) scripts/init-key
 	KEY_PAIR=$(GIT_KEY_PAIR) scripts/init-key
-	KEY_PAIR=$(DOCKER_REGISTRY_KEY_PAIR) scripts/init-key
 
 .PHONY: apply
 apply: keys
@@ -60,5 +54,4 @@ destroy: check
 		-no-color \
 		-var jenkins_key_pair=$(JENKINS_KEY_PAIR) \
 		-var git_key_pair=$(GIT_KEY_PAIR) \
-		-var docker_registry_key_pair=$(DOCKER_REGISTRY_KEY_PAIR) \
 		$(TERRAFORM_DIR)
