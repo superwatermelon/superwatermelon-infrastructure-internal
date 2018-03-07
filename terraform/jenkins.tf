@@ -32,7 +32,7 @@ resource "aws_instance" "jenkins" {
   ami                    = "${data.aws_ami.coreos.id}"
   instance_type          = "${var.jenkins_instance_type}"
   key_name               = "${var.jenkins_key_pair}"
-  subnet_id              = "${aws_subnet.subnet.id}"
+  subnet_id              = "${aws_subnet.subnet.0.id}"
   iam_instance_profile   = "${aws_iam_instance_profile.jenkins_profile.id}"
   user_data              = "${data.template_file.jenkins_ignition.rendered}"
   vpc_security_group_ids = [
@@ -49,7 +49,7 @@ resource "aws_instance" "jenkins" {
 }
 
 resource "aws_ebs_volume" "jenkins_volume" {
-  availability_zone = "${aws_subnet.subnet.availability_zone}"
+  availability_zone = "${aws_subnet.subnet.0.availability_zone}"
   size              = "${var.jenkins_volume_size}"
   type              = "gp2"
 

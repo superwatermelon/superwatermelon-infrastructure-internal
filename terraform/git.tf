@@ -43,7 +43,7 @@ resource "aws_instance" "git" {
   instance_type          = "${var.git_instance_type}"
   private_ip             = "${var.git_private_ip}"
   key_name               = "${var.git_key_pair}"
-  subnet_id              = "${aws_subnet.subnet.id}"
+  subnet_id              = "${aws_subnet.subnet.0.id}"
   user_data              = "${data.template_file.git_ignition.rendered}"
   vpc_security_group_ids = [
     "${aws_security_group.git_sg.id}",
@@ -64,7 +64,7 @@ resource "aws_eip" "git_eip" {
 }
 
 resource "aws_ebs_volume" "git_volume" {
-  availability_zone = "${aws_subnet.subnet.availability_zone}"
+  availability_zone = "${aws_subnet.subnet.0.availability_zone}"
   size              = "${var.git_volume_size}"
   type              = "gp2"
 

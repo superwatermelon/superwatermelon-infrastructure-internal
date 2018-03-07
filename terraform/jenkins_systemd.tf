@@ -116,7 +116,7 @@ EOF
     jenkins_agent_key_pair_prefix  = "${var.jenkins_agent_key_pair_prefix}"
     jenkins_agent_ami              = "${data.aws_ami.amazon_linux.id}"
     jenkins_agent_region           = "${data.aws_region.current.name}"
-    jenkins_agent_subnet_id        = "${aws_subnet.subnet.id}"
+    jenkins_agent_subnet_id        = "${aws_subnet.subnet.2.id}"
     jenkins_agent_instance_profile = "${aws_iam_instance_profile.jenkins_agent_profile.arn}"
     jenkins_agent_security_groups  = "${aws_security_group.jenkins_agent_sg.id}"
     jenkins_agent_name             = "jenkins-agent"
@@ -125,9 +125,7 @@ EOF
   }
 }
 
-data "aws_region" "current" {
-  current = true
-}
+data "aws_region" "current" {}
 
 data "template_file" "jenkins_home_service_unit" {
   template = <<EOF
