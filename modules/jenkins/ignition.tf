@@ -6,6 +6,7 @@ data "ignition_user" "jenkins" {
 data "ignition_file" "environment" {
   filesystem = "root"
   path       = "/mnt/jenkins/environment"
+  mode       = "0644"
 
   content {
     content = "${var.environment}"
@@ -15,6 +16,7 @@ data "ignition_file" "environment" {
 data "ignition_file" "jenkins_init_aws" {
   filesystem = "root"
   path       = "/mnt/jenkins/init.groovy.d/aws.groovy"
+  mode       = "0644"
 
   content {
     content = "${file("${path.root}/jenkins/init.groovy.d/aws.groovy")}"
@@ -24,6 +26,7 @@ data "ignition_file" "jenkins_init_aws" {
 data "ignition_file" "jenkins_init_git" {
   filesystem = "root"
   path       = "/mnt/jenkins/init.groovy.d/git.groovy"
+  mode       = "0644"
 
   content {
     content = "${file("${path.root}/jenkins/init.groovy.d/git.groovy")}"
@@ -33,6 +36,7 @@ data "ignition_file" "jenkins_init_git" {
 data "ignition_file" "jenkins_init_master" {
   filesystem = "root"
   path       = "/mnt/jenkins/init.groovy.d/master.groovy"
+  mode       = "0644"
 
   content {
     content = "${file("${path.root}/jenkins/init.groovy.d/master.groovy")}"
@@ -42,6 +46,7 @@ data "ignition_file" "jenkins_init_master" {
 data "ignition_file" "jenkins_init_security" {
   filesystem = "root"
   path       = "/mnt/jenkins/init.groovy.d/security.groovy"
+  mode       = "0644"
 
   content {
     content = "${file("${path.root}/jenkins/init.groovy.d/security.groovy")}"
@@ -79,6 +84,7 @@ data "ignition_config" "ignition" {
     "${data.ignition_user.jenkins.id}"
   ]
   files = [
+    "${data.ignition_file.environment.id}",
     "${data.ignition_file.jenkins_init_aws.id}",
     "${data.ignition_file.jenkins_init_git.id}",
     "${data.ignition_file.jenkins_init_master.id}",

@@ -101,7 +101,7 @@ EOF
 }
 
 module "jenkins" {
-  source            = "../modules/jenkins"
+  source            = "modules/jenkins"
   name              = "jenkins-master"
   environment       = "${data.template_file.jenkins_environment.rendered}"
   key_name          = "${var.jenkins_key_pair}"
@@ -116,7 +116,7 @@ module "jenkins" {
 }
 
 module "jenkins_agent" {
-  source                       = "../modules/jenkins-agent"
+  source                       = "modules/jenkins-agent"
   name                         = "jenkins-agent"
   internal_deployment_role_arn = "${data.terraform_remote_state.seed.internal_deployment_role_arn}"
   internal_ecr_role_arn        = "${data.terraform_remote_state.seed.internal_ecr_role_arn}"
