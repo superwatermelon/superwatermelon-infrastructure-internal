@@ -11,7 +11,7 @@ variable "jenkins_key_pair" {
 
 variable "jenkins_instance_type" {
   description = "The AWS instance type to use for the instance"
-  default     = "t2.micro"
+  default     = "t2.small"
 }
 
 variable "jenkins_volume_device" {
