@@ -107,6 +107,7 @@ module "jenkins" {
   key_name          = "${var.jenkins_key_pair}"
   availability_zone = "${aws_subnet.subnet.0.availability_zone}"
   subnet_id         = "${aws_subnet.subnet.0.id}"
+  instance_type     = "${var.jenkins_instance_type}"
 
   vpc_security_group_ids = [
     "${aws_security_group.jenkins_sg.id}"
