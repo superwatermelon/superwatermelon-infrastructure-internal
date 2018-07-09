@@ -17,7 +17,7 @@ resource "aws_route53_record" "jenkins_private_dns_record" {
   name    = "jenkins.${var.internal_hosted_zone}"
   type    = "A"
   ttl     = "300"
-  records = ["${aws_instance.jenkins.private_ip}"]
+  records = ["${module.jenkins.private_ip}"]
 }
 
 resource "aws_route53_record" "git_private_dns_record" {

@@ -4,8 +4,6 @@ TFPLAN_PATH = terraform.tfplan
 
 TERRAFORM = terraform
 
-TERRAFORM_DIR = terraform
-
 .PHONY: default
 default: load plan
 
@@ -25,8 +23,7 @@ load:
 		-no-color \
 		-backend=true \
 		-backend-config=backend.tfvars \
-		-input=false \
-		$(TERRAFORM_DIR)
+		-input=false
 
 .PHONY: plan
 plan: check
@@ -34,8 +31,7 @@ plan: check
 		-no-color \
 		-out $(TFPLAN_PATH) \
 		-var jenkins_key_pair=$(JENKINS_KEY_PAIR) \
-		-var git_key_pair=$(GIT_KEY_PAIR) \
-		$(TERRAFORM_DIR)
+		-var git_key_pair=$(GIT_KEY_PAIR)
 
 .PHONY: keys
 keys: check
@@ -53,5 +49,4 @@ destroy: check
 	$(TERRAFORM) destroy \
 		-no-color \
 		-var jenkins_key_pair=$(JENKINS_KEY_PAIR) \
-		-var git_key_pair=$(GIT_KEY_PAIR) \
-		$(TERRAFORM_DIR)
+		-var git_key_pair=$(GIT_KEY_PAIR)
