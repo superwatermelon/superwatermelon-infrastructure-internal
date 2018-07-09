@@ -13,7 +13,7 @@ variable "container_name" {
 
 variable "docker_image" {
   description = "The Docker image to use for Jenkins"
-  default     = "superwatermelon/jenkins:v0.4.4"
+  default     = "superwatermelon/jenkins:v2.131.0"
 }
 
 variable "mount_point" {
